@@ -41,6 +41,8 @@ def create_car():
     colour = choice(['red', 'blue', 'black', 'green'])
     car_positions.append(position)
     car = Car(c, position, is_turning, colour)
+    car.create(cars)
+    cars.append(car)
     print(car)
 
 

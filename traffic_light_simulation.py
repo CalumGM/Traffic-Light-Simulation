@@ -1,7 +1,7 @@
 # -----------------------
 # ---import tkinter---
 import tkinter as tk
-from random import randint
+from random import randint, choice
 import time
 import threading
 import sys
@@ -74,41 +74,13 @@ car_positions = []
 
 
 def create_car():
-    w = c.winfo_width()  # Get current width of canvas
-    h = c.winfo_height()  # Get current height of canvas
-
-    #  cars.append(car)
-    #  not sure how to let the class know about tk
-    car_position = randint(1, 4)
-    car_positions.append(car_position)
-    car = Car(c, car_position, False, 'red')
-    if car_position == 1:
-        print("Made Top Car")
-        # Create Top Car
-        car = c.create_rectangle(w / 2 + 40, 0, w / 2 + 10, 80, fill="blue")
-        cars.append(car)
-        return car_positions
-    elif car_position == 2:
-        print("Made Bottom Car")
-        # Create Bottom Car
-        car = c.create_rectangle(w / 2 - 40, h, w / 2 - 10, h - 80, fill="blue")
-        cars.append(car)
-        return car_positions
-    elif car_position == 3:
-        print("Made Left Car")
-        # Create Left Car
-        car = c.create_rectangle(0, h / 2 - 10, 80, h / 2 - 40, fill="blue")
-        cars.append(car)
-        return car_positions
-    elif car_position == 4:
-        print("Made Right Car")
-        # Create Right Car
-        car = c.create_rectangle(w, h / 2 + 10, w - 80, h / 2 + 40, fill="blue")
-        cars.append(car)
-        return car_positions
-    # make the cars be added into an array of cars (this will make it easier to move them later on)
-    # then give them instructions like turning left/right
-    print(cars)
+    position = randint(1, 4)
+    is_turning = choice([True, False])
+    colour = choice(['red', 'blue', 'black', 'green'])
+    car_positions.append(position)
+    car = Car(c, position, is_turning, colour)
+    car.create(cars)
+    cars.append(car)
 
 
 def simulation_loop():
@@ -119,20 +91,20 @@ def simulation_loop():
             break
         time.sleep(STEP_TIME)
         for i in range(len(cars)):  # Pick path for cars to go on
-            if car_positions[i] == 1:  # top
-                if c.coords(cars[i])[3] == h / 2 - 50:
+            if cars[i].position == 1:  # top
+                if c.coords(cars[i].car_rectangle)[3] == h / 2 - 50:
                     pass
                 else:
-                    c.move(cars[i], 0, STEP_DISTANCE)
-            elif car_positions[i] == 2:  # bottom
-                if c.coords(cars[i])[1] == h / 2 + 50:
+                    c.move(cars[i].car_rectangle, 0, STEP_DISTANCE)
+            elif cars[i].position == 2:  # bottom
+                if c.coords(cars[i].car_rectangle)[1] == h / 2 + 50:
                     pass
                 else:
-                    c.move(cars[i], 0, -STEP_DISTANCE)
-            elif car_positions[i] == 3:  # left
-                c.move(cars[i], STEP_DISTANCE, 0)
-            elif car_positions[i] == 4:  # right
-                c.move(cars[i], -STEP_DISTANCE, 0)
+                    c.move(cars[i].car_rectangle, 0, -STEP_DISTANCE)
+            elif cars[i].position == 3:  # left
+                c.move(cars[i].car_rectangle, STEP_DISTANCE, 0)
+            elif cars[i].position == 4:  # right
+                c.move(cars[i].car_rectangle, -STEP_DISTANCE, 0)
 
 
 threading.Thread(target=simulation_loop, name="simulationThread", args=()).start()
