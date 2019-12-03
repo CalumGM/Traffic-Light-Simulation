@@ -9,9 +9,11 @@ from Car import Car
 
 STEP_DISTANCE = 2
 STEP_TIME = 0.01
+BREAK_THREAD = False
 
 
 def exit_program():
+    BREAK_THREAD = True
     sys.exit()
 
 
@@ -74,11 +76,12 @@ car_positions = []
 def create_car():
     w = c.winfo_width()  # Get current width of canvas
     h = c.winfo_height()  # Get current height of canvas
-    #  car = Car(car_position, turning, colour)
+
     #  cars.append(car)
     #  not sure how to let the class know about tk
     car_position = randint(1, 4)
     car_positions.append(car_position)
+    car = Car(c, car_position, False, 'red')
     if car_position == 1:
         print("Made Top Car")
         # Create Top Car
@@ -112,6 +115,8 @@ def simulation_loop():
     w = c.winfo_width()  # Get current width of canvas
     h = c.winfo_height()  # Get current height of canvas
     while True:
+        if BREAK_THREAD:
+            break
         time.sleep(STEP_TIME)
         for i in range(len(cars)):  # Pick path for cars to go on
             if car_positions[i] == 1:  # top
