@@ -18,8 +18,8 @@ def exit_program():
 
 
 def create_grid(event):
-    w = c.winfo_width()  # Get current width of canvas
-    h = c.winfo_height()  # Get current height of canvas
+    w = canvas.winfo_width()  # Get current width of canvas
+    h = canvas.winfo_height()  # Get current height of canvas
     '''
     # Create all vertical lines at intervals of 100
     for i in range(0, w, 50):
@@ -30,19 +30,19 @@ def create_grid(event):
         c.create_line([(0, i), (w, i)], tag='grid_line')
     '''
     # line(w1, h1, w2, h2)
-    c.create_line(w / 2 - 50, 0, w / 2 - 50, h / 2 - 50, fill="black", width=5)
-    c.create_line(w / 2 + 50, 0, w / 2 + 50, h / 2 - 50, fill="black", width=5)
+    canvas.create_line(w / 2 - 50, 0, w / 2 - 50, h / 2 - 50, fill="black", width=5)
+    canvas.create_line(w / 2 + 50, 0, w / 2 + 50, h / 2 - 50, fill="black", width=5)
 
-    c.create_line(w / 2 - 50, h / 2 + 50, w / 2 - 50, h, fill="black", width=5)
-    c.create_line(w / 2 + 50, h / 2 + 50, w / 2 + 50, h, fill="black", width=5)
+    canvas.create_line(w / 2 - 50, h / 2 + 50, w / 2 - 50, h, fill="black", width=5)
+    canvas.create_line(w / 2 + 50, h / 2 + 50, w / 2 + 50, h, fill="black", width=5)
 
-    c.create_line(0, h / 2 + 50, w / 2 - 50, h / 2 + 50, fill="black", width=5)
-    c.create_line(w / 2 + 50, h / 2 + 50, w, h / 2 + 50, fill="black", width=5)
+    canvas.create_line(0, h / 2 + 50, w / 2 - 50, h / 2 + 50, fill="black", width=5)
+    canvas.create_line(w / 2 + 50, h / 2 + 50, w, h / 2 + 50, fill="black", width=5)
 
-    c.create_line(0, h / 2 - 50, w / 2 - 50, h / 2 - 50, fill="black", width=5)
-    c.create_line(w / 2 + 50, h / 2 - 50, w, h / 2 - 50, fill="black", width=5)
+    canvas.create_line(0, h / 2 - 50, w / 2 - 50, h / 2 - 50, fill="black", width=5)
+    canvas.create_line(w / 2 + 50, h / 2 - 50, w, h / 2 - 50, fill="black", width=5)
 
-    c.create_rectangle(w / 2 + 60, h / 2 - 60, w / 2 + 80, h / 2 - 110)
+    canvas.create_rectangle(w / 2 + 60, h / 2 - 60, w / 2 + 80, h / 2 - 110)
 
 
 # Create GUI
@@ -50,8 +50,8 @@ def create_grid(event):
 
 window = tk.Tk()
 
-c = tk.Canvas(window, height=600, width=600, bg='white')
-c.pack(fill=tk.BOTH, expand=True)
+canvas = tk.Canvas(window, height=600, width=600, bg='white')
+canvas.pack(fill=tk.BOTH, expand=True)
 
 f = tk.Frame(window)
 f.pack()
@@ -59,52 +59,46 @@ window.title("Traffic Light Simulation")
 
 # The 'configure' event is triggered when the window's size is changed
 # It sends a new height and width to the function
-c.bind('<Configure>', create_grid)
+canvas.bind('<Configure>', create_grid)
 print("loaded GUI")
 
 # ---Main---
 
-
-# first research how threading works, then define function that randomly generates cars with various paths
 # Car attributes = speed, turing (true/false, if true: left/right)
 # Traffic lights: design sprites, define main road, timer to change, only activate if a car is waiting
 
 cars = []  # define car array
-car_positions = []
 
 
 def create_car():
     position = randint(1, 4)
     is_turning = choice([True, False])
     colour = choice(['red', 'blue', 'black', 'green'])
-    car_positions.append(position)
-    car = Car(c, position, is_turning, colour)
+    car = Car(canvas, position, is_turning, colour)
     car.create(cars)
     cars.append(car)
 
 
 def simulation_loop():
-    w = c.winfo_width()  # Get current width of canvas
-    h = c.winfo_height()  # Get current height of canvas
-    while True:
-        if BREAK_THREAD:
-            break
+    w = canvas.winfo_width()  # Get current width of canvas
+    h = canvas.winfo_height()  # Get current height of canvas
+    while not BREAK_THREAD:
         time.sleep(STEP_TIME)
         for i in range(len(cars)):  # Pick path for cars to go on
             if cars[i].position == 1:  # top
-                if c.coords(cars[i].car_rectangle)[3] == h / 2 - 50:
+                if canvas.coords(cars[i].car_rectangle)[3] == h / 2 - 50:  # stop at the 'lights'
                     pass
                 else:
-                    c.move(cars[i].car_rectangle, 0, STEP_DISTANCE)
+                    cars[i].move(STEP_DISTANCE)
             elif cars[i].position == 2:  # bottom
-                if c.coords(cars[i].car_rectangle)[1] == h / 2 + 50:
+                if canvas.coords(cars[i].car_rectangle)[1] == h / 2 + 50:
                     pass
                 else:
-                    c.move(cars[i].car_rectangle, 0, -STEP_DISTANCE)
+                    cars[i].move(STEP_DISTANCE)
             elif cars[i].position == 3:  # left
-                c.move(cars[i].car_rectangle, STEP_DISTANCE, 0)
+                cars[i].move(STEP_DISTANCE)
             elif cars[i].position == 4:  # right
-                c.move(cars[i].car_rectangle, -STEP_DISTANCE, 0)
+                cars[i].move(STEP_DISTANCE)
 
 
 threading.Thread(target=simulation_loop, name="simulationThread", args=()).start()

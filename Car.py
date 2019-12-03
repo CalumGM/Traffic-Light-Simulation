@@ -1,5 +1,7 @@
 from random import randint
 
+STEP_DISTANCE = 2
+
 
 class Car:
     def __init__(self, canvas, position=1, is_turning=False, colour='blue'):
@@ -41,3 +43,21 @@ class Car:
             # Create Right Car
             car_rectangle = self.canvas.create_rectangle(w, h / 2 + 10, w - 80, h / 2 + 40, fill=self.colour)
             self.car_rectangle = car_rectangle
+
+    def move(self, distance):
+        w = self.canvas.winfo_width()  # Get current width of canvas
+        h = self.canvas.winfo_height()  # Get current height of canvas
+        if self.position == 1:  # top
+            if self.canvas.coords(self.car_rectangle)[3] == h / 2 - 50:  # stop at the 'lights'
+                pass
+            else:
+                self.canvas.move(self.car_rectangle, 0, STEP_DISTANCE)
+        elif self.position == 2:  # bottom
+            if self.canvas.coords(self.car_rectangle)[1] == h / 2 + 50:
+                pass
+            else:
+                self.canvas.move(self.car_rectangle, 0, -STEP_DISTANCE)
+        elif self.position == 3:  # left
+            self.canvas.move(self.car_rectangle, STEP_DISTANCE, 0)
+        elif self.position == 4:  # right
+            self.canvas.move(self.car_rectangle, -STEP_DISTANCE, 0)
