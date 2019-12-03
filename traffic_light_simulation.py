@@ -86,15 +86,13 @@ def simulation_loop():
         time.sleep(STEP_TIME)
         for i in range(len(cars)):  # Pick path for cars to go on
             if cars[i].position == 1:  # top
-                if canvas.coords(cars[i].car_rectangle)[3] == h / 2 - 50:  # stop at the 'lights'
+                # stop at the 'lights'
+                if cars[i].colliding(cars):
                     pass
                 else:
                     cars[i].move(STEP_DISTANCE)
             elif cars[i].position == 2:  # bottom
-                if canvas.coords(cars[i].car_rectangle)[1] == h / 2 + 50:
-                    pass
-                else:
-                    cars[i].move(STEP_DISTANCE)
+                cars[i].move(STEP_DISTANCE)
             elif cars[i].position == 3:  # left
                 cars[i].move(STEP_DISTANCE)
             elif cars[i].position == 4:  # right

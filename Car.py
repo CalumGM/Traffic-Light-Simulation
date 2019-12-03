@@ -61,3 +61,33 @@ class Car:
             self.canvas.move(self.car_rectangle, STEP_DISTANCE, 0)
         elif self.position == 4:  # right
             self.canvas.move(self.car_rectangle, -STEP_DISTANCE, 0)
+
+    def colliding(self, cars):
+        if self.position == 1:  # top
+            top_cars = [car for car in cars if car.position == 1]
+            for top_car in top_cars:
+                top_car_id = id(top_car)
+                self_id = id(self)
+                if self.canvas.coords(self.car_rectangle)[3] == self.canvas.coords(top_car.car_rectangle)[
+                    1] - 20 and top_car_id != self_id:
+                    print("self {} other {}".format(id(self), id(top_car)))
+                    return True
+            return False
+        elif self.position == 2:  # bottom
+            bottom_cars = [car for car in cars if car.position == 2]
+            for bottom_car in bottom_cars:
+                if self.canvas.coords(self.car_rectangle)[1] == self.canvas.coords(bottom_car.car_rectangle)[1]:
+                    return True
+            return False
+        elif self.position == 3:  # left
+            left_cars = [car for car in cars if car.position == 3]
+            for left_car in left_cars:
+                if self.canvas.coords(self.car_rectangle)[0] == self.canvas.coords(left_car.car_rectangle)[0]:
+                    return True
+            return False
+        elif self.position == 4:  # right
+            right_cars = [car for car in cars if car.position == 4]
+            for right_car in right_cars:
+                if self.canvas.coords(self.car_rectangle)[2] == self.canvas.coords(right_car.car_rectangle)[2]:
+                    return True
+            return False
