@@ -13,6 +13,7 @@ BREAK_THREAD = False
 
 
 def exit_program():
+    global BREAK_THREAD
     BREAK_THREAD = True
     sys.exit()
 
@@ -82,21 +83,32 @@ def create_car():
 def simulation_loop():
     w = canvas.winfo_width()  # Get current width of canvas
     h = canvas.winfo_height()  # Get current height of canvas
+
     while not BREAK_THREAD:
         time.sleep(STEP_TIME)
         for i in range(len(cars)):  # Pick path for cars to go on
             if cars[i].position == 1:  # top
                 # stop at the 'lights'
                 if cars[i].colliding(cars):
-                    pass
+                    cars[i].move_backward(STEP_DISTANCE)
                 else:
-                    cars[i].move(STEP_DISTANCE)
+                    cars[i].move_forward(STEP_DISTANCE)
             elif cars[i].position == 2:  # bottom
-                cars[i].move(STEP_DISTANCE)
+                if cars[i].colliding(cars):
+                    cars[i].move_backward(cars)
+                else:
+                    cars[i].move_forward(STEP_DISTANCE)
             elif cars[i].position == 3:  # left
-                cars[i].move(STEP_DISTANCE)
+                if cars[i].colliding(cars):
+                    cars[i].move_backward(cars)
+                else:
+                    cars[i].move_forward(STEP_DISTANCE)
             elif cars[i].position == 4:  # right
-                cars[i].move(STEP_DISTANCE)
+                if cars[i].colliding(cars):
+                    pass
+                    # cars[i].move_backward(cars)
+                else:
+                    cars[i].move_forward(STEP_DISTANCE)
 
 
 threading.Thread(target=simulation_loop, name="simulationThread", args=()).start()
