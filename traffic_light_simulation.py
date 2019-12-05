@@ -86,7 +86,7 @@ def simulation_loop():
 
     while not BREAK_THREAD:
         time.sleep(STEP_TIME)
-        for i in range(len(cars)):  # Pick path for cars to go on
+        for i in range(len(cars)):  # iterate through all the cars and move them accordingly
             if cars[i].position == 1:  # top
                 # stop at the 'lights'
                 if cars[i].colliding(cars):
@@ -105,8 +105,7 @@ def simulation_loop():
                     cars[i].move_forward(STEP_DISTANCE)
             elif cars[i].position == 4:  # right
                 if cars[i].colliding(cars):
-                    pass
-                    # cars[i].move_backward(cars)
+                    cars[i].move_backward(cars)
                 else:
                     cars[i].move_forward(STEP_DISTANCE)
 
