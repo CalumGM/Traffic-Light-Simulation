@@ -27,9 +27,7 @@ class Car:
     def create(self, cars):
         w = self.canvas.winfo_width()  # Get current width of canvas
         h = self.canvas.winfo_height()  # Get current height of canvas
-        if self.position == 1:
-            # Create Top Car
-
+        if self.position == 1:  # Create Top Car
             car_rectangle = self.canvas.create_rectangle(w / 2 + 40, 0, w / 2 + 10, 80, fill=self.colour)
             self.car_rectangle = car_rectangle
         elif self.position == 2:
@@ -81,7 +79,7 @@ class Car:
         elif self.position == 4:  # right
             self.canvas.move(self.car_rectangle, STEP_DISTANCE, 0)
 
-    def colliding(self, cars, front_car):
+    def colliding(self, front_car):
         if self.position == 1:  # top
             if (self.canvas.coords(self.car_rectangle)[3] >= (self.canvas.coords(front_car.car_rectangle)[1] -
                                                               20)) and id(self) != id(front_car):
@@ -98,3 +96,16 @@ class Car:
             if (self.canvas.coords(self.car_rectangle)[0] <= (self.canvas.coords(front_car.car_rectangle)[2] +
                                                               20)) and id(self) != id(front_car):
                 return True
+
+    def delete_redundant_cars(self):
+        w = self.canvas.winfo_width()  # Get current width of canvas
+        h = self.canvas.winfo_height()  # Get current height of canvas
+        if self.position == 1 and self.canvas.coords(self.car_rectangle)[1] > h:  # top
+            print('{} and {}'.format(self.canvas.coords(self.car_rectangle)[1], h))
+            del self
+        elif self.position == 2 and self.canvas.coords(self.car_rectangle)[3] > 0:  # bottom
+            del self
+        elif self.position == 3 and self.canvas.coords(self.car_rectangle)[0] > w:  # left
+            del self
+        elif self.position == 4 and self.canvas.coords(self.car_rectangle)[2] > 0:  # right
+            del self
