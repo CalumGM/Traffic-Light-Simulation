@@ -11,30 +11,40 @@ class TrafficLight:
         self.light_circle = None
 
     def turn_red(self):
-        print('turn red')
         self.colour = 'red'
         if self.position == 1:  # top
-            self.canvas.move(self.light_circle, 0, -58)
+            self.canvas.move(self.light_circle, 0, 40)
+            self.canvas.itemconfig(self.light_circle, fill=self.colour)
         elif self.position == 2:  # bottom
-            self.canvas.move(self.light_circle, 0, 58)
+            self.canvas.move(self.light_circle, 0, -40)
+            self.canvas.itemconfig(self.light_circle, fill=self.colour)
         elif self.position == 3:  # left
-            self.canvas.move(self.light_circle, 58, 0)
+            self.canvas.move(self.light_circle, 40, 0)
+            self.canvas.itemconfig(self.light_circle, fill=self.colour)
         elif self.position == 4:  # right
-            self.canvas.move(self.light_circle, -58, 0)
-        # move to the red space
-        # change the fill colour to self.colour
+            self.canvas.move(self.light_circle, -40, 0)
+            self.canvas.itemconfig(self.light_circle, fill=self.colour)
 
     def turn_green(self):
-        print('turn green')
         self.colour = 'green'
         if self.position == 1:  # top
-            self.canvas.move(self.light_circle, 0, 58)
+            self.canvas.move(self.light_circle, 0, -40)
+            self.canvas.itemconfig(self.light_circle, fill=self.colour)
         elif self.position == 2:  # bottom
-            self.canvas.move(self.light_circle, 0, -58)
+            self.canvas.move(self.light_circle, 0, 40)
+            self.canvas.itemconfig(self.light_circle, fill=self.colour)
         elif self.position == 3:  # left
-            self.canvas.move(self.light_circle, -58, 0)
+            self.canvas.move(self.light_circle, -40, 0)
+            self.canvas.itemconfig(self.light_circle, fill=self.colour)
         elif self.position == 4:  # right
-            self.canvas.move(self.light_circle, 58, 0)
+            self.canvas.move(self.light_circle, 40, 0)
+            self.canvas.itemconfig(self.light_circle, fill=self.colour)
 
     def create(self, top, bottom, left, right):
         self.light_circle = self.canvas.create_oval(top, bottom, left, right, fill=self.colour)
+
+    def change_colour(self):
+        if self.colour == 'red':
+            self.turn_green()
+        else:
+            self.turn_red()

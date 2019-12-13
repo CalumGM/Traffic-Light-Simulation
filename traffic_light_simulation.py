@@ -69,19 +69,22 @@ def create_grid(event):
     # create circles for the lights, make 3, but just use red and green for testing
 
     # lights = top, bottom, left, right
-    lights = [TrafficLight(canvas, 1, 'green'), TrafficLight(canvas, 2, 'green'),
-              TrafficLight(canvas, 3, 'red'),
-              TrafficLight(canvas, 4, 'red')]
+    lights.append(TrafficLight(canvas, 1, 'green'))
+    lights.append(TrafficLight(canvas, 2, 'green'))
+    lights.append(TrafficLight(canvas, 3, 'red'))
+    lights.append(TrafficLight(canvas, 4, 'red'))
 
     lights[0].create(w / 2 + 61, h / 2 - 101, w / 2 + 79, h / 2 - 119)
-
     lights[1].create(w / 2 - 61, h / 2 + 101, w / 2 - 79, h / 2 + 119)
     lights[2].create(w / 2 - 61, h / 2 - 79, w / 2 - 79, h / 2 - 61)
     lights[3].create(w / 2 + 61, h / 2 + 79, w / 2 + 79, h / 2 + 61)
 
+    '''
     lights[0].turn_red()
+    lights[1].turn_red()
+    lights[2].turn_green()
     lights[3].turn_green()
-
+    '''
 
 # Create GUI
 
@@ -102,10 +105,10 @@ print("loaded GUI")
 
 # ---Main---
 
-# Car attributes = speed, turing (true/false, if true: left/right)
 # Traffic lights: design sprites, define main road, timer to change, only activate if a car is waiting
 
 cars = []  # define car array
+lights = []
 
 
 def create_car():
@@ -117,13 +120,21 @@ def create_car():
     cars.append(car)
 
 
+def change_lights():
+    for light in lights:
+        light.change_colour()
+
+
+
 def simulation_loop():
-    w = canvas.winfo_width()  # Get current width of canvas
-    h = canvas.winfo_height()  # Get current height of canvas
+    # w = canvas.winfo_width()  # Get current width of canvas
+    # h = canvas.winfo_height()  # Get current height of canvas
+
     while not BREAK_THREAD:
         time.sleep(STEP_TIME)
         for i in range(len(cars)):  # iterate through all the cars and move them accordingly
-            cars[i].delete_redundant_cars()
+            delete_car = cars[i].delete_redundant_cars()
+            del delete_car
             if cars[i].position == 1:  # top
                 front_cars = [car for car in cars if car.position == 1 and cars.index(car) < cars.index(cars[i])]
                 try:
@@ -173,5 +184,7 @@ exitButton = tk.Button(f, text="EXIT", fg='red', command=exit_program)
 exitButton.pack(side=tk.LEFT)
 carButton = tk.Button(f, text="Create New Car", fg='red', command=create_car)
 carButton.pack(side=tk.RIGHT)
+lightsButton = tk.Button(f, text="Change Lights", fg='red', command=change_lights)
+lightsButton.pack(side=tk.RIGHT)
 
 window.mainloop()
