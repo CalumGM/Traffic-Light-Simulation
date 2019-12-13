@@ -101,7 +101,6 @@ class Car:
         w = self.canvas.winfo_width()  # Get current width of canvas
         h = self.canvas.winfo_height()  # Get current height of canvas
         if self.position == 1 and self.canvas.coords(self.car_rectangle)[1] > h:  # top
-            print('{} and {}'.format(self.canvas.coords(self.car_rectangle)[1], h))
             return self
         elif self.position == 2 and self.canvas.coords(self.car_rectangle)[3] > 0:  # bottom
             return self

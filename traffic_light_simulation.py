@@ -86,6 +86,7 @@ def create_grid(event):
     lights[3].turn_green()
     '''
 
+
 # Create GUI
 
 
@@ -107,8 +108,8 @@ print("loaded GUI")
 
 # Traffic lights: design sprites, define main road, timer to change, only activate if a car is waiting
 
-cars = []  # define car array
-lights = []
+cars = []  # all car objects are stored in this list
+lights = []  # all light objects are stored in this list
 
 
 def create_car():
@@ -125,17 +126,16 @@ def change_lights():
         light.change_colour()
 
 
-
 def simulation_loop():
-    # w = canvas.winfo_width()  # Get current width of canvas
-    # h = canvas.winfo_height()  # Get current height of canvas
+    w = canvas.winfo_width()  # Get current width of canvas
+    h = canvas.winfo_height()  # Get current height of canvas
 
     while not BREAK_THREAD:
         time.sleep(STEP_TIME)
         for i in range(len(cars)):  # iterate through all the cars and move them accordingly
             delete_car = cars[i].delete_redundant_cars()
             del delete_car
-            if cars[i].position == 1:  # top
+            if cars[i].position == 1 and lights[0].colour == 'green' and canvas.coords(cars[i].car_rectangle)[0] != h / 2 - 50:  # top
                 front_cars = [car for car in cars if car.position == 1 and cars.index(car) < cars.index(cars[i])]
                 try:
                     front_car = front_cars[-1]
@@ -145,7 +145,7 @@ def simulation_loop():
                         cars[i].move_forward(STEP_DISTANCE)
                 except IndexError:
                     cars[i].move_forward(STEP_DISTANCE)
-            elif cars[i].position == 2:  # bottom
+            elif cars[i].position == 2 and lights[1].colour == 'green' and canvas.coords(cars[i].car_rectangle)[2] != h / 2 + 50:  # bottom
                 front_cars = [car for car in cars if car.position == 2 and cars.index(car) < cars.index(cars[i])]
                 try:
                     front_car = front_cars[-1]
@@ -155,7 +155,7 @@ def simulation_loop():
                         cars[i].move_forward(STEP_DISTANCE)
                 except IndexError:
                     cars[i].move_forward(STEP_DISTANCE)
-            elif cars[i].position == 3:  # left
+            elif cars[i].position == 3 and lights[2].colour == 'green' and canvas.coords(cars[i].car_rectangle)[1] != w / 2 - 50:
                 front_cars = [car for car in cars if car.position == 3 and cars.index(car) < cars.index(cars[i])]
                 try:
                     front_car = front_cars[-1]
@@ -165,7 +165,7 @@ def simulation_loop():
                         cars[i].move_forward(STEP_DISTANCE)
                 except IndexError:
                     cars[i].move_forward(STEP_DISTANCE)
-            elif cars[i].position == 4:  # right
+            elif cars[i].position == 4 and lights[3].colour == 'green' and canvas.coords(cars[i].car_rectangle)[3] != w / 2 + 50:  # right
                 front_cars = [car for car in cars if car.position == 4 and cars.index(car) < cars.index(cars[i])]
                 try:
                     front_car = front_cars[-1]
