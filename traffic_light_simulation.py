@@ -135,46 +135,59 @@ def simulation_loop():
         for i in range(len(cars)):  # iterate through all the cars and move them accordingly
             delete_car = cars[i].delete_redundant_cars()
             del delete_car
-            if cars[i].position == 1 and lights[0].colour == 'green' and canvas.coords(cars[i].car_rectangle)[0] != h / 2 - 50:  # top
-                front_cars = [car for car in cars if car.position == 1 and cars.index(car) < cars.index(cars[i])]
-                try:
-                    front_car = front_cars[-1]
-                    if cars[i].colliding(front_car):
-                        cars[i].move_backward(STEP_DISTANCE)
-                    else:
+            if cars[i].position == 1:  # top
+                if lights[0].colour == 'red' and canvas.coords(cars[i].car_rectangle)[3] == h / 2 - 50:
+                    print('red light')
+                    pass
+                else:
+                    front_cars = [car for car in cars if car.position == 1 and cars.index(car) < cars.index(cars[i])]
+                    try:
+                        front_car = front_cars[-1]
+                        if cars[i].colliding(front_car):
+                            cars[i].move_backward(STEP_DISTANCE)
+                        else:
+                            cars[i].move_forward(STEP_DISTANCE)
+                    except IndexError:
                         cars[i].move_forward(STEP_DISTANCE)
-                except IndexError:
-                    cars[i].move_forward(STEP_DISTANCE)
-            elif cars[i].position == 2 and lights[1].colour == 'green' and canvas.coords(cars[i].car_rectangle)[2] != h / 2 + 50:  # bottom
-                front_cars = [car for car in cars if car.position == 2 and cars.index(car) < cars.index(cars[i])]
-                try:
-                    front_car = front_cars[-1]
-                    if cars[i].colliding(front_car):
-                        cars[i].move_backward(cars)
-                    else:
+            elif cars[i].position == 2:
+                if lights[1].colour == 'red' and canvas.coords(cars[i].car_rectangle)[1] == h / 2 + 50:  # bottom
+                    pass
+                else:
+                    front_cars = [car for car in cars if car.position == 2 and cars.index(car) < cars.index(cars[i])]
+                    try:
+                        front_car = front_cars[-1]
+                        if cars[i].colliding(front_car):
+                            cars[i].move_backward(cars)
+                        else:
+                            cars[i].move_forward(STEP_DISTANCE)
+                    except IndexError:
                         cars[i].move_forward(STEP_DISTANCE)
-                except IndexError:
-                    cars[i].move_forward(STEP_DISTANCE)
-            elif cars[i].position == 3 and lights[2].colour == 'green' and canvas.coords(cars[i].car_rectangle)[1] != w / 2 - 50:
-                front_cars = [car for car in cars if car.position == 3 and cars.index(car) < cars.index(cars[i])]
-                try:
-                    front_car = front_cars[-1]
-                    if cars[i].colliding(front_car):
-                        cars[i].move_backward(cars)
-                    else:
+            elif cars[i].position == 3:
+                if lights[2].colour == 'red' and canvas.coords(cars[i].car_rectangle)[2] == w / 2 - 50:
+                    pass
+                else:
+                    front_cars = [car for car in cars if car.position == 3 and cars.index(car) < cars.index(cars[i])]
+                    try:
+                        front_car = front_cars[-1]
+                        if cars[i].colliding(front_car):
+                            cars[i].move_backward(cars)
+                        else:
+                            cars[i].move_forward(STEP_DISTANCE)
+                    except IndexError:
                         cars[i].move_forward(STEP_DISTANCE)
-                except IndexError:
-                    cars[i].move_forward(STEP_DISTANCE)
-            elif cars[i].position == 4 and lights[3].colour == 'green' and canvas.coords(cars[i].car_rectangle)[3] != w / 2 + 50:  # right
-                front_cars = [car for car in cars if car.position == 4 and cars.index(car) < cars.index(cars[i])]
-                try:
-                    front_car = front_cars[-1]
-                    if cars[i].colliding(front_car):
-                        cars[i].move_backward(cars)
-                    else:
+            elif cars[i].position == 4:
+                if lights[3].colour == 'red' and canvas.coords(cars[i].car_rectangle)[0] == w / 2 + 50:  # right
+                    pass
+                else:
+                    front_cars = [car for car in cars if car.position == 4 and cars.index(car) < cars.index(cars[i])]
+                    try:
+                        front_car = front_cars[-1]
+                        if cars[i].colliding(front_car):
+                            cars[i].move_backward(cars)
+                        else:
+                            cars[i].move_forward(STEP_DISTANCE)
+                    except IndexError:
                         cars[i].move_forward(STEP_DISTANCE)
-                except IndexError:
-                    cars[i].move_forward(STEP_DISTANCE)
 
 
 threading.Thread(target=simulation_loop, name="simulationThread", args=()).start()
