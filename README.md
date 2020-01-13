@@ -1,4 +1,5 @@
 # Traffic-Light-Simulation
 Personal project that i work on during uni holidays
-This project is an absolute shambles. Nothing is made with any thought of future development, i just kinda
-keep going until shit breaks.
+This project is made to test myself on what i have learnt throughout the semester while also using new programming techniques and python libraries that i have a particular interest in. 
+
+Still in development
